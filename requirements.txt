@@ -1,4 +1,7 @@
 langchain
 langchain-ollama
 langchain-chroma
+langchain-google-genai
+google-generativeai
 pandas
+python-dotenv

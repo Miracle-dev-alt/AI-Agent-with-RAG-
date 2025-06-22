@@ -1,104 +1,210 @@
-# LocalAIAgentWithRAG
+# AI Agent with RAG - Local Ollama vs Cloud Gemini
 
-A Retrieval-Augmented Generation (RAG) AI agent that runs entirely on your local machine using Ollama models.
+A Retrieval-Augmented Generation (RAG) AI agent that can answer questions about a pizza restaurant based on customer reviews. Choose between running locally with Ollama or using Google's Gemini API in the cloud.
 
-## Overview
+## 🎯 Choose Your Implementation
 
-This project demonstrates how to build a question-answering system that retrieves relevant information from a database of restaurant reviews before generating responses. By running locally with Ollama, it offers:
+This project offers two implementations:
 
-- 🚀 Fast responses without internet latency
-- 🔒 Privacy-focused architecture with no data sent to external APIs
-- 💰 Cost-free alternative to cloud-based LLM services
+### 🏠 **Local Ollama Version** (`main.py`)
+- **Privacy-focused**: Runs entirely on your local machine
+- **Cost-free**: No API costs or usage limits
+- **Offline capable**: Works without internet connection
+- **Customizable**: Use any Ollama model you prefer
 
-## Prerequisites
+### ☁️ **Cloud Gemini Version** (`gemini.py`)
+- **Powerful**: Uses Google's latest Gemini 1.5 Flash model
+- **Fast**: Optimized for speed and accuracy
+- **Reliable**: Managed cloud infrastructure
+- **Scalable**: No local resource limitations
 
+## 📋 Prerequisites
+
+### For Local Ollama Version:
 - [Ollama](https://ollama.ai/) installed on your system
 - Python 3.8+
 - Required Ollama models:
-  - `llama3.2` (for text generation)
+  - `deepseek-r1:1.5b` (for text generation)
   - `mxbai-embed-large` (for embeddings)
 
-## Installation
+### For Cloud Gemini Version:
+- Python 3.8+
+- Google AI Studio account
+- Gemini API key
 
-1. Clone this repository
-2. Install the required packages:
+## 🚀 Quick Start
+
+### Option 1: Local Ollama (Recommended for Privacy)
+
+1. **Install Ollama and Models:**
+   ```bash
+   # Install Ollama (follow instructions at https://ollama.ai/)
+   # Then pull the required models:
+   ollama pull deepseek-r1:1.5b
+   ollama pull mxbai-embed-large
    ```
+
+2. **Install Python Dependencies:**
+   ```bash
    pip install -r requirements.txt
    ```
-3. Make sure Ollama is running in the background
 
-## Usage
-
-1. First, prepare the vector database by running:
-   ```
-   python vector.py
-   ```
-   This will process the restaurant reviews and create embeddings.
-
-2. Start the interactive question-answering system:
-   ```
+3. **Run the Local AI Agent:**
+   ```bash
    python main.py
    ```
-   
-3. Type your questions about the restaurant when prompted. The system will find relevant reviews and generate an informed response.
-   
-4. Enter `q` when you want to quit the application.
 
-## Example Interaction
+### Option 2: Cloud Gemini (Recommended for Performance)
 
-Here's what the interaction looks like when you run the system:
+1. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Get Your Gemini API Key:**
+   - Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Sign in with your Google account
+   - Click "Create API Key"
+   - Copy the generated API key
+
+3. **Set Up API Key:**
+   ```bash
+   # Option A: Set environment variable
+   # Windows:
+   set GOOGLE_API_KEY=your_api_key_here
+   # Linux/Mac:
+   export GOOGLE_API_KEY=your_api_key_here
+   
+   # Option B: Create .env file
+   echo GOOGLE_API_KEY=your_api_key_here > .env
+   ```
+
+4. **Run the Cloud AI Agent:**
+   ```bash
+   python gemini.py
+   ```
+
+## 🍕 How to Use
+
+Both versions work the same way:
+
+1. **Start the application** using either `python main.py` (Ollama) or `python gemini.py` (Gemini)
+2. **Ask questions** about the pizza restaurant when prompted
+3. **Get AI responses** based on customer reviews
+4. **Type 'q'** to quit
+
+### Example Questions:
+- "What do customers say about the pizza quality?"
+- "What are the most common complaints?"
+- "How is the customer service?"
+- "What are the best-rated menu items?"
+- "What are the delivery times like?"
+
+## 🔧 How It Works
+
+Both implementations follow the same RAG (Retrieval-Augmented Generation) process:
+
+1. **Data Loading**: Restaurant reviews from `realistic_restaurant_reviews.csv`
+2. **Vector Embeddings**: Reviews converted to numerical vectors
+3. **Vector Database**: Embeddings stored in Chroma for fast retrieval
+4. **RAG Process**: 
+   - Find relevant reviews using similarity search
+   - Pass reviews + question to AI model
+   - Generate contextual response
+
+## 📁 Project Structure
 
 ```
--------------------------------
-Ask your question (q to quit): What do people say about the pizza crust?
-
-
-Based on the reviews, people have varied opinions about the pizza crust:
-
-Many positive reviews mention the crust being "perfectly crispy on the outside and chewy inside" with some describing it as having "that perfect combination of crispy and chewy with a slight sourdough tang."
-
-Several reviews praise the thin crust options, with comments like "cracker-thin, crispy all the way through, yet somehow still has a nice chew" and "their crust has the perfect crispness all the way through - no soggy middle!"
-
-There are also specialty crusts mentioned, including "excellent gluten-free option" with a "cauliflower crust that doesn't fall apart," and "Detroit-style square pizza" with "crispy cheese edges, fluffy interior."
-
-However, some negative reviews mention issues like "doughy and undercooked" centers, "tough leathery crust," or being "burned on the bottom." A few customers complained about the crust being "stale-tasting" or having a "refrigerator taste."
-
-Overall, when the crust is done well, it seems to be a highlight of the restaurant's pizza.
-
--------------------------------
-Ask your question (q to quit): Are there any good vegan options?
-
-
-Based on the reviews, there are indeed excellent vegan options at this restaurant:
-
-One reviewer specifically called it a "hidden gem for vegans" and mentioned that the restaurant makes their own cashew cheese "that actually melts properly" and uses fresh, seasonal vegetable toppings. They noted that even their non-vegan friends loved it.
-
-Another positive mention was about their "great gluten-free option" with a cauliflower crust, which might appeal to some vegan customers looking for alternative crusts.
-
-However, there was one negative review about their vegan cheese option, describing it as "terrible" with "no meltability, a grainy texture, and tasted strongly of coconut which clashed with the tomato sauce." This reviewer suggested that if the restaurant can't do vegan cheese well, they should "offer cheese-free options that are properly balanced."
-
-Overall, it seems the restaurant does offer good vegan options that most customers enjoy, though the quality of their vegan cheese might be inconsistent or divisive.
-
--------------------------------
-Ask your question (q to quit): q
+LocalAIAgentWithRAG/
+├── main.py                    # Local Ollama implementation
+├── gemini.py                  # Cloud Gemini implementation
+├── vector.py                  # Vector database setup (Ollama)
+├── realistic_restaurant_reviews.csv  # Sample data
+├── requirements.txt           # Python dependencies
+└── README.md                  # This file
 ```
 
-## How it Works
+## ⚖️ Comparison: Ollama vs Gemini
 
-1. **Vectorization**: The system converts restaurant reviews into vector embeddings using Ollama's `mxbai-embed-large` model
-2. **Retrieval**: When you ask a question, the system finds the most relevant reviews using similarity search
-3. **Generation**: The retrieved reviews are passed to the LLM (llama3.2) along with your question to generate an informed response
+| Feature | Ollama (Local) | Gemini (Cloud) |
+|---------|----------------|----------------|
+| **Privacy** | ✅ Complete | ❌ Data sent to Google |
+| **Cost** | ✅ Free | 💰 Pay per use |
+| **Speed** | ⚡ Depends on hardware | ⚡ Fast cloud processing |
+| **Internet** | ❌ Not required | ✅ Required |
+| **Setup** | 🔧 More complex | 🔧 Simpler |
+| **Models** | 🎛️ Customizable | 🎛️ Fixed to Gemini |
+| **Scalability** | 📊 Limited by hardware | 📊 Unlimited |
 
-## Project Structure
+## 🛠️ Advanced Configuration
 
-- `main.py` - The interactive question-answering loop
-- `vector.py` - Creates and manages the vector database
-- `realistic_restaurant_reviews.csv` - Dataset of restaurant reviews
-- `requirements.txt` - Required Python packages
+### Customizing Ollama Models
 
-## Limitations
+Edit `main.py` to use different models:
+```python
+# Change the model name
+model = OllamaLLM(model="llama3.2")  # or any other model
 
-- Quality depends on the Ollama models you have installed
-- Limited to knowledge within the restaurant reviews dataset
-- No memory of previous interactions in the conversation
+# Change the embedding model in vector.py
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
+```
 
+### Customizing Gemini Models
+
+Edit `gemini.py` to use different Gemini models:
+```python
+# Use different Gemini model
+model = ChatGoogleGenerativeAI(model="gemini-1.5-pro")  # or gemini-1.0-pro
+```
+
+## 🔍 Troubleshooting
+
+### Ollama Issues:
+- **Model not found**: Run `ollama pull model_name`
+- **Ollama not running**: Start Ollama service
+- **Slow responses**: Try smaller models or better hardware
+
+### Gemini Issues:
+- **API key error**: Check your `GOOGLE_API_KEY` environment variable
+- **Quota exceeded**: Check usage in Google AI Studio dashboard
+- **Import errors**: Run `pip install -r requirements.txt`
+
+### General Issues:
+- **Vector database errors**: Delete the `chrome_langchain_db` or `chroma_gemini_db` folders to rebuild
+- **CSV file missing**: Ensure `realistic_restaurant_reviews.csv` is in the project directory
+
+## 🎯 Which Should You Choose?
+
+### Choose **Ollama (Local)** if you:
+- Value privacy and data control
+- Want to avoid ongoing costs
+- Have decent local hardware
+- Need offline functionality
+- Want to experiment with different models
+
+### Choose **Gemini (Cloud)** if you:
+- Want the best performance and accuracy
+- Don't mind cloud-based processing
+- Prefer simpler setup
+- Have budget for API costs
+- Need reliable, managed infrastructure
+
+## 📈 Performance Tips
+
+### For Ollama:
+- Use SSD storage for faster vector operations
+- Allocate sufficient RAM (8GB+ recommended)
+- Consider using smaller models for faster responses
+
+### For Gemini:
+- Monitor API usage to control costs
+- Use appropriate models for your use case
+- Implement caching for repeated queries
+
+## 🤝 Contributing
+
+Feel free to contribute improvements, bug fixes, or additional features to either implementation!
+
+## 📄 License
+
+This project is open source and available under the MIT License. 

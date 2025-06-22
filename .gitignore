@@ -1,2 +1,4 @@
 chrome_langchain_db
+chroma_gemini_db
 __pycache__
+.env
